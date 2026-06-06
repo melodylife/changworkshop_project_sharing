@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "stitch": {
+      "serverUrl": "https://stitch.googleapis.com/mcp",
+      "headers": {
+        "X-Goog-Api-Key": [YOUR_STITCH_API_KEY]
+      }
+    },
+    "xcode": {
+      "command": "/Applications/Xcode.app/Contents/Developer/usr/bin/mcpbridge",
+      "env": {
+        "PATH": "/usr/bin:/usr/local/bin:/usr/sbin:/sbin"
+      }
+    }
+  }
+}
