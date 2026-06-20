@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLX Multimodal Lab - Vision & Audio Showcase</title>
+    <meta name="description" content="A premium showcase of Apple MLX vision-language understanding (mlx_vlm) and text-to-speech synthesis (mlx_audio) capabilities.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS Style -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="glow-backdrop"></div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-area">
+                <span class="logo-icon">⚡</span>
+                <div class="title-meta">
+                    <h1>MLX Multimodal Lab</h1>
+                    <p class="subtitle">High-performance on-device AI running on Apple Silicon</p>
+                </div>
+            </div>
+            
+            <div class="header-controls" style="display: flex; align-items: center; gap: 20px;">
+                <div class="lang-selector-group" style="display: flex; align-items: center; gap: 8px;">
+                    <label for="lang-select" style="margin: 0; font-size: 11px; font-weight: 600; color: var(--text-secondary);">Language:</label>
+                    <div class="select-wrapper" style="width: 130px;">
+                        <select id="lang-select">
+                            <option value="en">English 🇬🇧</option>
+                            <option value="zh">Chinese 🇨🇳</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="system-status">
+                    <div class="status-indicator" id="vlm-status-card">
+                        <span class="status-dot idle" id="vlm-status-dot"></span>
+                        <span class="status-label">VLM: <strong id="vlm-active-model">Unloaded</strong></span>
+                    </div>
+                    <div class="status-indicator" id="tts-status-card">
+                        <span class="status-dot idle" id="tts-status-dot"></span>
+                        <span class="status-label">TTS: <strong id="tts-active-model">Unloaded</strong></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <main class="dashboard-grid">
+            
+            <!-- Vision Module (VLM) -->
+            <section class="dashboard-panel vlm-panel">
+                <div class="panel-header">
+                    <div class="panel-icon">👁️</div>
+                    <h2>Vision Understanding (mlx_vlm)</h2>
+                </div>
+                
+                <div class="panel-body">
+                    <!-- Model Selection -->
+                    <div class="form-group">
+                        <label for="vlm-model-select">Select VLM Model</label>
+                        <div class="select-wrapper">
+                            <select id="vlm-model-select"></select>
+                        </div>
+                    </div>
+
+                    <!-- Upload Zone -->
+                    <div class="upload-zone" id="upload-zone">
+                        <input type="file" id="image-input" accept="image/*" style="display: none;">
+                        <div class="upload-prompt" id="upload-prompt">
+                            <span class="upload-icon">📸</span>
+                            <p class="upload-text">Drag & drop your picture here or <span class="browse-link">browse</span></p>
+                            <p class="upload-sub">Supports PNG, JPG, JPEG, WEBP</p>
+                        </div>
+                        <div class="upload-preview" id="upload-preview" style="display: none;">
+                            <img src="" alt="Uploaded Preview" id="preview-img">
+                            <button type="button" class="remove-img-btn" id="remove-img-btn">Remove ×</button>
+                        </div>
+                    </div>
+
+                    <!-- Prompt Input -->
+                    <div class="form-group">
+                        <label for="vlm-prompt">Analysis Prompt</label>
+                        <input type="text" id="vlm-prompt" placeholder="Ask about this image..." value="Describe this image in detail.">
+                    </div>
+
+                    <!-- Trigger Buttons -->
+                    <div class="form-row">
+                        <button class="action-btn vlm-btn flex-1" id="vlm-btn" disabled>
+                            <span class="btn-text">Analyze Image</span>
+                            <span class="btn-spinner" id="vlm-spinner"></span>
+                        </button>
+                        <button class="action-btn narrate-btn flex-1" id="narrate-btn" disabled style="background: linear-gradient(135deg, #00f2fe 0%, #ec4899 100%); box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2);">
+                            <span class="btn-text">Narrate Image 🎙️</span>
+                            <span class="btn-spinner" id="narrate-spinner"></span>
+                        </button>
+                    </div>
+
+                    <!-- Text Output -->
+                    <div class="output-container">
+                        <div class="output-header">
+                            <span>Analysis Output</span>
+                            <span class="output-type-badge text-badge">streamed text</span>
+                        </div>
+                        <div class="output-box scrollbar" id="vlm-output-box">
+                            <p class="output-placeholder">Upload an image and click Analyze to generate understanding...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audio Module (TTS) -->
+            <section class="dashboard-panel tts-panel">
+                <div class="panel-header">
+                    <div class="panel-icon">🔊</div>
+                    <h2>Speech Synthesis (mlx_audio)</h2>
+                </div>
+
+                <div class="panel-body">
+                    <!-- Model Selection -->
+                    <div class="form-group">
+                        <label for="tts-model-select">Select TTS Model</label>
+                        <div class="select-wrapper">
+                            <select id="tts-model-select"></select>
+                        </div>
+                    </div>
+
+                    <!-- Voice / Speaker & Speed -->
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="tts-voice-select">Speaker Voice</label>
+                            <div class="select-wrapper">
+                                <select id="tts-voice-select"></select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group flex-1">
+                            <label for="tts-speed-slider">Speed: <span id="speed-val">1.0x</span></label>
+                            <div class="slider-wrapper">
+                                <input type="range" id="tts-speed-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mode Selection -->
+                    <div class="form-group">
+                        <div class="toggle-group">
+                            <div class="toggle-label-desc">
+                                <span class="toggle-title">Real-Time Streaming</span>
+                                <span class="toggle-desc">Synthesize and play audio chunks with minimal latency</span>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="tts-stream-toggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Text Input -->
+                    <div class="form-group">
+                        <label for="tts-input-text">Text to Synthesize</label>
+                        <textarea id="tts-input-text" placeholder="Enter text to speak..." class="scrollbar">Welcome to the Apple Silicon Multimodal Laboratory. This voice is synthesized on-device in real-time using the MLX framework.</textarea>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button class="action-btn tts-btn" id="tts-btn">
+                        <span class="btn-text">Generate Audio</span>
+                        <span class="btn-spinner" id="tts-spinner"></span>
+                    </button>
+
+                    <!-- Audio Player -->
+                    <div class="output-container">
+                        <div class="output-header">
+                            <span>Audio Output</span>
+                            <span class="output-type-badge audio-badge" id="tts-mode-badge">stream mode</span>
+                        </div>
+                        <div class="audio-player-box">
+                            <div class="audio-controls">
+                                <button class="play-pause-btn" id="play-pause-btn" disabled>
+                                    <span class="play-icon">▶</span>
+                                    <span class="pause-icon" style="display: none;">⏸</span>
+                                </button>
+                                <div class="audio-progress-container">
+                                    <div class="audio-waveform-vis" id="waveform-vis">
+                                        <!-- Waveform blocks will be generated by JS -->
+                                        <div class="vis-idle">Audio idle</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Standard audio tag for non-stream playback -->
+                            <audio id="tts-audio-element" style="display: none;"></audio>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Performance Metrics Dashboard -->
+        <section class="metrics-dashboard">
+            <div class="panel-header">
+                <div class="panel-icon">📊</div>
+                <h2>Performance Dashboard</h2>
+            </div>
+            
+            <div class="metrics-grid">
+                <!-- VLM Metrics -->
+                <div class="metrics-column">
+                    <h3>Vision understanding Metrics</h3>
+                    <div class="metrics-cards">
+                        <div class="metric-card">
+                            <span class="metric-title">Prompt Speed</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="vlm-metric-prompt-speed">-</span>
+                                <span class="metric-unit">tok/s</span>
+                            </div>
+                            <p class="metric-desc">Time to ingest prompt and image</p>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <span class="metric-title">Generation Speed</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="vlm-metric-gen-speed">-</span>
+                                <span class="metric-unit">tok/s</span>
+                            </div>
+                            <p class="metric-desc">Token generation throughput</p>
+                        </div>
+
+                        <div class="metric-card">
+                            <span class="metric-title">Prompt / Gen Tokens</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="vlm-metric-tokens">-</span>
+                                <span class="metric-unit">tokens</span>
+                            </div>
+                            <p class="metric-desc">Total processed token count</p>
+                        </div>
+
+                        <div class="metric-card glow-teal">
+                            <span class="metric-title">Peak Memory</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="vlm-metric-memory">-</span>
+                                <span class="metric-unit">GB</span>
+                            </div>
+                            <p class="metric-desc">Active memory during vision run</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TTS Metrics -->
+                <div class="metrics-column">
+                    <h3>Speech Synthesis Metrics</h3>
+                    <div class="metrics-cards">
+                        <div class="metric-card">
+                            <span class="metric-title">Processing Latency</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="tts-metric-latency">-</span>
+                                <span class="metric-unit">s</span>
+                            </div>
+                            <p class="metric-desc">Total time elapsed in backend</p>
+                        </div>
+
+                        <div class="metric-card">
+                            <span class="metric-title">Real-Time Factor (RTF)</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="tts-metric-rtf">-</span>
+                                <span class="metric-unit">x</span>
+                            </div>
+                            <p class="metric-desc">Lower is faster (e.g. 0.2 means 5x faster than real-time)</p>
+                        </div>
+
+                        <div class="metric-card">
+                            <span class="metric-title">Audio Specs</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="tts-metric-specs">-</span>
+                                <span class="metric-unit" id="tts-metric-specs-unit"></span>
+                            </div>
+                            <p class="metric-desc">Duration and audio sample rate</p>
+                        </div>
+
+                        <div class="metric-card glow-pink">
+                            <span class="metric-title">Peak Memory</span>
+                            <div class="metric-value-container">
+                                <span class="metric-value" id="tts-metric-memory">-</span>
+                                <span class="metric-unit">GB</span>
+                            </div>
+                            <p class="metric-desc">Active memory during audio run</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Made with Apple MLX Framework. Run models locally on your Mac. | <a href="file:///Users/sunchang/Documents/projects/mlx2026/multimodal_demo/app.py" id="backend-link">View Backend Source</a></p>
+        </footer>
+    </div>
+
+    <!-- JavaScript logic -->
+    <script src="index.js"></script>
+</body>
+</html>
