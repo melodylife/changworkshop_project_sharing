@@ -1,0 +1,31 @@
+{
+  "architectures": [
+    "SopranoForCausalLM"
+  ],
+  "model_type": "soprano",
+  "hidden_size": 512,
+  "num_hidden_layers": 17,
+  "num_attention_heads": 4,
+  "num_key_value_heads": 1,
+  "head_dim": 128,
+  "intermediate_size": 2304,
+  "vocab_size": 8192,
+  "max_position_embeddings": 512,
+  "rms_norm_eps": 1e-06,
+  "rope_theta": 10000,
+  "tie_word_embeddings": false,
+  "decoder_num_layers": 8,
+  "decoder_dim": 512,
+  "decoder_intermediate_dim": 1536,
+  "hop_length": 512,
+  "n_fft": 2048,
+  "upscale": 4,
+  "dw_kernel": 3,
+  "sample_rate": 32000,
+  "token_size": 2048,
+  "receptive_field": 4,
+  "use_cache": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0
+}

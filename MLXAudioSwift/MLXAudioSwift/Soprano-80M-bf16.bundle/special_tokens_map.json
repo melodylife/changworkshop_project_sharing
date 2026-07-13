@@ -1,0 +1,9 @@
+{
+    "pad_token": {
+      "content": "[STOP]",
+      "lstrip": false,
+      "normalized": false,
+      "rstrip": false,
+      "single_word": false
+    }
+  }

@@ -1,0 +1,29 @@
+{
+    "adapter_type": "mlp",
+    "architectures": [
+        "GlmasrModel"
+    ],
+    "attn_implementation": "flash_attention_2",
+    "auto_map": {
+        "AutoConfig": "configuration_glmasr.GlmasrConfig",
+        "AutoModelForCausalLM": "modeling_glmasr.GlmasrModel"
+    },
+    "max_length": 65536,
+    "max_whisper_length": 1500,
+    "merge_factor": 4,
+    "mlp_adapter_act": "gelu",
+    "model_type": "glmasr",
+    "quantization": {
+        "group_size": 64,
+        "bits": 4,
+        "mode": "affine"
+    },
+    "quantization_config": {
+        "group_size": 64,
+        "bits": 4,
+        "mode": "affine"
+    },
+    "torch_dtype": "bfloat16",
+    "transformers_version": "4.51.3",
+    "use_rope": true
+}

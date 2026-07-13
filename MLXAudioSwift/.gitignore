@@ -1,0 +1,23 @@
+# OS X
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Model weights (ignore large binary files to prevent GitHub push errors)
+*.safetensors
+*.bin
+*.pth
+*.pt
+*.onnx
