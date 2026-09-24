@@ -1,0 +1,7 @@
+# v0 依赖
+# 默认中继实现 = Google ADK（server/server_adk.py）
+# 备用裸 WebSocket 实现（server/server.py）零额外依赖，排查时用
+fastapi>=0.115
+uvicorn[standard]>=0.30
+websockets>=12.0
+google-adk>=2.9

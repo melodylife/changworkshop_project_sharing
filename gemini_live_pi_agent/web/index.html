@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>万用搭子 · v0</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin:0; font:14px/1.45 -apple-system,"PingFang SC",system-ui,sans-serif;
+         background:#0e1116; color:#e6edf3; padding:10px; display:flex; gap:10px; overflow:hidden; }
+  #left { flex:0 0 42%; display:flex; flex-direction:column; gap:8px; min-width:0; }
+  #right { flex:1 1 auto; display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .card { background:#161b22; border:1px solid #21262d; border-radius:10px; padding:10px; }
+  #ctrl { flex:0 0 33%; overflow:auto; padding:8px 10px; }
+  #prevCard { flex:1 1 auto; display:flex; flex-direction:column; min-height:0; }
+  h1 { font-size:16px; margin:0 0 6px; letter-spacing:.5px; }
+  #upstream { display:flex; align-items:center; gap:8px; border-left:4px solid #4285f4;
+              background:#4285f41a; border-radius:8px; padding:6px 8px; margin-bottom:6px;
+              overflow:hidden; min-width:0; }
+  #upstream img { width:26px; height:26px; flex:0 0 auto; }
+  .up-name { font-size:15px; font-weight:700; line-height:1.2; }
+  .up-sub { font-size:10px; color:#8b949e; font-family:ui-monospace,monospace; overflow-wrap:anywhere; }
+  .up-google { border-left-color:#4285f4; background:#4285f41a; }
+  .up-google .up-name { color:#79c0ff; }
+  .up-qwen { border-left-color:#ff8a3d; background:#ff8a3d1a; }
+  .up-qwen .up-name { color:#ffb37a; }
+  .up-unk { border-left-color:#8b949e; background:transparent; }
+  .up-unk .up-name { color:#8b949e; }
+  .row { display:flex; gap:6px; align-items:center; margin-top:6px; }
+  .row > * { flex:1; min-width:0; }
+  .row2 { display:flex; gap:6px; align-items:center; margin-top:5px; }
+  .row2 > * { min-width:0; }
+  .row2 > .lb { flex:0 0 56px; font-size:12px; color:#8b949e; }
+  select, input[type=text] { width:100%; padding:5px 7px; border-radius:7px; border:1px solid #30363d;
+         background:#0d1117; color:#e6edf3; font:inherit; font-size:13px; }
+  select:disabled { opacity:.35; }
+  .radios { display:flex; gap:12px; flex:1 1 auto; }
+  .radios label { display:flex; align-items:center; gap:4px; font-size:13px; cursor:pointer; }
+  .radios input { accent-color:#238636; }
+  button { padding:8px 12px; border-radius:8px; border:0; background:#238636; color:#fff; font-weight:600; }
+  button.alt { background:#21262d; color:#e6edf3; border:1px solid #30363d; }
+  button:disabled { opacity:.5; }
+  video { width:100%; flex:1 1 auto; min-height:0; border-radius:8px; background:#000; object-fit:contain; }
+  .badge { display:inline-block; font-size:11px; padding:1px 7px; border-radius:999px;
+           background:#1f6feb33; color:#79c0ff; margin-left:6px; }
+  .warn { background:#9e6a0322; border-color:#9e6a03; color:#ffd33d; font-size:12px; }
+  .ask { border-color:#d29922; background:#9e6a0322; color:#ffd33d; font-size:13px; line-height:1.5; }
+  .pulse { animation:p 1.2s infinite; }
+  @keyframes p { 50% { opacity:.45 } }
+  #logCard { flex:1 1 auto; display:flex; flex-direction:column; min-height:0; }
+  #log { flex:1 1 auto; overflow:auto; font:12px/1.5 ui-monospace,monospace; }
+  #log .ln { display:flex; gap:6px; padding:1px 0; }
+  #log .ts { color:#56606b; flex:0 0 auto; }
+  #log .bd { flex:0 0 auto; }
+  #log .ms { flex:1 1 auto; white-space:pre-wrap; word-break:break-word; }
+  .k-sys .ms { color:#6e7681; } .k-you .ms { color:#79c0ff; } .k-model .ms { color:#7ee787; }
+  .k-tool .ms { color:#ffb37a; } .k-pi .ms { color:#d2a8ff; } .k-ask .ms { color:#ffd33d; }
+  .k-prog .ms { color:#79c0ff; } .k-err .ms { color:#ff7b72; }
+  #logHead { font-size:12px; color:#8b949e; float:right; }
+  .radios label { white-space:nowrap; }
+  .up-sub { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* 窄屏（手机）：改为上下堆叠，避免两栏互相挤压 */
+  @media (max-width: 900px) {
+    html, body { height:auto; }
+    body { flex-direction:column; overflow:auto; }
+    #left, #right { flex:1 1 auto; }
+    #ctrl { flex:0 0 auto; }
+    #prevCard { flex:0 0 auto; }
+    video { height:38vh; flex:0 0 auto; }
+    #log { max-height:42vh; }
+  }
+</style>
+</head>
+<body>
+  <div id="left">
+    <div class="card" id="ctrl">
+      <h1>万用搭子</h1>
+      <div id="upstream" class="up up-unk" style="display:none">
+        <img id="upIcon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAATjUlEQVR42u2cf6xkZ3nfP8/zvufMmTMz965tMKriqJGgJrYxRaQB5JBctkkoSmjkAHMDWC5gE1BQWguSBkOkjm9bNUSpSmma/GF+NioF7uC2UQKJIGi7bTDBtY0D9YLBNFJLa1gbr3fvnfPzfd+nf5y59kKMavAua1iONLpnruaPc77z/X6fn2fgCXQYqIHyg+NRwZFHOz/Xh3+iXIiArba2LqkBOXr0K0+U6zrndLb53BlIdfjwVXnu794c5f/DDr/wKgOx+dyd9wBx/LgImJdwvXduwzu32WdynYBx/Lg8AZh97o/bf+zHsitn5efyLLs0qqeWdM+07q+Uo0fDec2gAwk984Lp33ZZfmln0Bg4zZ/+UDF7JsDuOZaZnmt5DTR2L3FZLlF8TOrjOC8lZPlLAebnWGZyzkP7fJ61J04cy7LsqXUiBefxWakncfeeyP/WFVcsd3oBO+8YdGRrywO0J078bO7zpzbRkqlXE6+nsDQrZk/b1K/9tAA233XnHUAvuPhiEzA8vyoOoohFUYJzmBbWZ2P2fPEPAePyu88vBtl87lguU/vKVz7LqfvZVTQzl7vgM3pXEnzhjiNmxcYLP/Paf/4s2dmxc2XWei4z5/bkQzd6N3JB8hhdRvQjohvT+5yk46ijDbefjd862NX8/DBpm8+dLJfxxPYvPntch9v6aNK6XKMb0/kRnR9TZyV9NmOVT1NXXmj7yT3nF/71tXfuznfd9nI7nhcM0qr77Uyd68WbuZzkM7oso81H9NmIJs9pfGFkm64rRm8DzgmJ5Jyw5xde9LJDWiwfDBaTK12fjehdQZPNaPKC2m/S5DNqn1Nn4yibP+S+3srLXvvPnn/L7q657W2J33cMWoBy+eV24lWvOuSleHtjWHIjaXNH6x2Nz6gzT515mjynzjLabEKdjeWUZZZG5dvf8Y4vbtx9N2Zm8n3X7rhpa0tlZyfsXX3128tsfMnxGKNq6aLmdL6g8VPabEKbFdS+pPYlbZbT+ZmuLMVstvnDVVP/q50deS0c8UD4vpGYbW15OXo0HH/ZL778QvUfOBlc6L33rRvT+pLWlTT5iDqb0foJld+kzibU+ZjObdBkGa0bBymf7Pe6Zvuf/toly8XC/M6OhO95gA585/gvXX1pib89oJNGcundWOosp/UltW4M3pPNaNyMKpvQ+DG1n9K6CU2WU2tucTQzY7S3X3c//m/efPGX5nNzy+XZ9aOz6kG2WCjLZbJrrtnINf+wej9rnLOYjaXJC9psSpeNaUYltd+k9iVVNqLKcmo/onE5tc+odEQvhaxisDovNsO4vOUN//Zr091d0mJh+j0JkNnAzpsWCznlug/Ncn/lCVxsi8KtRgX1KKPNyzVbShpfUrkxlR9R6SEqnVG5MSstqNVTqafVkduvmmjjyZX76dAHRODYsaVwFk1bzmKVrrJcxq+/Zv7ezSx/9X1dCpaVvtOC2m3QuDFVNqKRDSo/ZuUn1G5KK1NWWUHrCjoZ0+iExnk6zehRDE+jEkaTwter8L7dG7LXzOfmlrskROwJD5AtFgo7yA7poete/K6N4tD193cW6sz7xo3oZJPGjWl8Sa0Tap2xn02pdUytBbXOaPyYRsZ06qk1p9ERQTIiQkTpcSSTXqd51qy4+SNvlNcvFqY7ADuSnrAAHRiygey/7sXvGZflq7/WZSG6zFc+o5UZrU6o3GTwG92kZkrlCio3ppaSTmbs5TmN5PR4ahnRqUPM01tOJ0IEkgkJgiu9b5vw3k+8MbsO4Ewbt5w55mx52TkavnjNizb+xpP8+yd++uL/E1Jos9y3vqBnRiODtGqdsO+mVDqhpqTSKbVMqHVELVMazWkkoxNPT0Ywj5mjE6UXIRqYCGZGnwijifOh4Q/brz5w7a2/8+S9rYX5o2coBZAzYsY3bTnZORoeuOGnLstH5X/IR8WzjrcuJC18qwW1m9DJBpWW7LmSRqesZEqlJTUTaplSUbLSEY2O6JOnkxEBRycZvWVEHBEIHAAE2ODPyVJwE/WxT3emrn/lrW8u7tlamD96E/Hx+tLjAsh25062lxHgod98/iucjn8PHV1wKrhQ57nvmNDohFrXYGhJxWQtrQn7MqVhSkPBSgpqSnrL6REaxkSEnpweJRkkhICQzDAUEGx9+wGCG+FT4sHYxzfc/mb/IYD5rrnl46jd5DuT05AeyA7p5I0/flE21t/WPL/+ZCpoYx57X7jKjWgoaXRCpZMBGJlRsUEtMyqZUDOhsyn7ZFQypo8lPY5oSiNjeoOAJyVHWtcWyQZQDMHW7w/uIlmK6tRpBn0I7xwH/+Y/f4uceDwGLt82MFcgsk0EqH7nR1+ubvxbmuU/cn/jY6DQ4Eay0pKeKfs6ppIpLTNqmbJixsomrGRGw4QuTVlR0qSCzgoay+jWjIkppzehN09CMIF4AI6t5YWRWMsNEBOSRVOR5Ep1qU3/M2E33vEbfvkwm+7Gvh2g5DHlNLsod2OyQwJY3fw3n+dCtsj86EWr6DkZRtG0cIGclZaD4UpJJWNqZjTMqGzKiikrm1LbjMYuoCKnTQVdnNCZJ+BpbGBOtJyQhIAjIZDWkWstKRM58MD1XxukpyAGZhZd7pw6iH36EzG96Y4b5TaAxcL02BXIcps0fPrbBMhAMIT/gsrhR6pme/9TntPE7NeSuXmhKg82PgUZE3SkrYxorRwikxTUbNCmMXs6Yd82qGyTOm2wYkJtM7o4pbKSxgpCGBPM0ZHRpREh6SArE6I54tpr0volCAKkh6dBMpwbJBHUDBBESGYJP1ZNXTLQD6SMt3/mTXL7wT1tLcwfhcQO9mhgyTdFJP1roLzjaaPwQ9ULBfe6kPj50QjZ23fE5GNQdbWM6cTTypjGJjQ2oZJyMGCbsseYVdqkSpusbEYfptRpg4oBnC4UxFDS4+lTRp9GxAQpZUSDaIrZgd8M3nPwLdrBCba+FXn0r9ssIupcAalPZsZHnNObH8q/9LF7b7i0PR2sF0DaOU2C37CTczCgsyNbnvYLz+5SvJroXpJn7umYcqoRzCRizgV1tOT05mnJqaSktpLKBvNdMaGyKftpQpUOUaUNVjah7Sd0aYPGSto4pk0FMUwIOHrLCDEnRUiWE+MaoAOW2CMTxEFa6bTbkMeSkkRVnCvWpt6He0D/Y3D6nw+d4s5HcieTAzbJQS4jgnWfePJVLrdXxYqfdOou00JIrVB1JEMs4VxC6UWJKC0jQsqpJae2kpWN2ZcJbZpQpQlVKtlLG1TpEKs0ZWUTmjihD1NCmNFYQZ9KYhwToydYTogOS0JM+cAk00E6DInhARDfCNBjr7lFMCMmVRHNVNVDbEEtfd47/hutvu/Wt8qnMBNEzNsCFSFVRy/44dSnT2S5FGbQ9BitxCSqMlJNHOQhQ7JmpkSEDqFH6JLQH/wvCrWDKkEdoUqRKkbaZASDINCp0RtYGm4zipGSkbCHRfMwK9YRK2KonU7876gZIYJzA4NI1pEUnHi9THIu62O69jlvs0tvE/kKC9NvbLlmBrkjRUcPCIqJkkSJQERIpiSUFkdDRjCjN6ExpU1CZ9A6o08DUB1GJ5HeIjEZrUv0lggpYikRJNFLGvIaC2C69hlDTIaIdHBnBqe9e/wLkd9kxiKAJKB5pCctO6RBYif+d/fnF//dZP7VAfnJbKyXlWPnmxb2O0tR1MycM3H0Ipi5tW9Al5RoQkxCZ0afbCgok2GaMEuYS6QUSTEQiSSMQCASMIlDXJJHLjdKGqaLDKwkDRueQ3iXx1seRRFEPepyNHZASp/XoP/Vm/93t96YfWUtseQf0SUizz/+KeBTZlu+uuvLzz7VcnUSeUm5mT09qfLgSoimMeFcQLF1hEH8UCelhEUhiREk0BNoYyDQE6Qnxh5iAOkw16z9pQciSZVokZgODCZ9CwkdCFC/U2CcH+MAQkj3pFZvSdr/4XSV3Xn0N04z6XUN508fBT8c5uVoAG4DbrMvPm3nRJ39vd6510nBz80K707sQTSJCXXBlJAEkg4VNmBpneM61iYzOJipYbpO6EiYJKKk4dwSIglRI1lCDZKk0xSlQySx9LiAsR5LffpIEr15L9eP3XuDPLYw/1gSxfu+/LzntG17Q4t7hS+9PHBKU29Cm3Jt04gqZVQpZ2UjVrFgPxbs9wVNmFKlkraf0vYzmjghhgl9PyWFMSlOsFisQ/uIFHJYJ4uWHBFFbNhdSOnbilzJDHyBxpDMox9KxtsPMupvBOUxJIrfsp2xRJljIkNcvfue5z5XvP4TycY/t98kTtUaW0auTp4mZOxbziqW7Kecqi+o+yn7aUzbDyA1cULsZ4R+SgglKY6xUBItx9KIFDMs5lgaQr6ZwxgKVr7puzX71qxxGU4cpJD+RDTu3PGP808PU0zT+WMsNfxjyRtgKE7NUJZzkacvPw38/F1fesEvofq2C540+pHjD0mUYOo8ogkcAS8enxIu9Tg8TgNOI84CaE/0HeAxPMk6iAK4QUriQHSdvh5cgv7/k0IbEm9f4qxLf0Wwt9x5eutjXawuz2q7w9Z9ZyF9/NM/fVF5kXsbo/K1J+rEfk2sbOyaIKzimP04ogojVnFM201p+hl1nBL6MW0s1yyaEEMBYYSlEgvl0AiLxSAxU8QUTEnpAKR1oXH6QMOI4nCSQUrpne3+3o3Hdg49yMFo6Gy3O/46UHMnMjTMjtz7spdHF3+/F3fB8VMWQsj8fiw4FUc0YfCjuhvThJJV2CSEkj5M6LsJIZTEWJD6EaQS4oRkSow5ljKIfgDn4RzpNGnZwChbN8yInIgxvuEzN/oPnomG2eOai4ksoxly5MiWP/y0D3+w2W9/gih3XXwo9+JCcL6n0IbcNXjf4rKWzLXkbh9xFaot6lrEteA6cENOlLTGJIGEIT3VHnMBc4boMN0RARFBVEAJ2QRvibus46rP3Og/uLUwj5ksH+cmyOMeHIpghw8fDUeObPkXX/nRzz9w/95W2/V/dOFFmXeagnegTnBqeE14teHlepx2qKsR1yDagbaI9qAHIT8hrgftebiHKANATsCJoaSQT/Cxi3+0H/mpO35TvvBw0/4MzMnO6Nhnd3futreX0TBZfmH7PTodv/prD6SwCoXfi566P5DYmFUY0XVTmjChCyUxFFhfEmNJClNIBcQxlhykjJQyzBzK4EeWBlllZeZjnd77F7/urh8mT2d27HNGR8/b28u4sIXetBDZ/tHla7q97l0XXDTymXYhc0amQw7uNaI6JIVoAAkICTRiGjHtMe1I2pI0YhpAA6ppKDw0Ipr6fJr5WIV3/sWvu+tYmLAwPdPLDHK25vLL5Vy3t5fxXceueY8rx6/5v18n1GHk98OIVT9i1Y9p+yl1LOi6ktCXhDAmppIYJmsGFWAjJHrMRmjKUFOiSRiVMx/3q/d98k2Tszp6PivLCyLYfL5Mu7tzd/1l77++ORk/snlIvEgXvYuI63DSg9aIdIhrMddirsO0Bm0xbbG1L6EB0YC5QJIu5rOpj83JP/7kmybXzee7Zw2cs7rdIYLdffflBhDd/svruv7seKpOLEZVQzSCRpCASQA3yMjWQJh24JqH36M9Qh/9pHCpO/nZE9q+AjOWl8/tbIEDQzl51o6jR4/asSvm7l8eXraH3/DMP5Pk/0GPFk0QOkSiyXooqIR1rjz0nGQ9ysnW0UsxM3OZQ0knvcafuf1XnvLV+RVXuGO/+ozE9/IS53J7GRdHFv6tz/j39zZ77euzsejQf0sDJLI2ZokDkwigFRAxbUiuHvIi30VXqsZ+/5eP/vJT7t1amF9un/2d6e/KluvO4Z2wOLLwO1f9wW5VNe8eb6g3uphcWEeqZugPuYboK6JrCb4iuoqkgV6a6DdGXruT7/7Urzz1w1tHjpyx5YQnzJ60mclN3CT33XHfTEw/V8X8kpONWNuX2sQRbcwJfUGfRqRYYrFEbITYKHndFJfc/7oo2jP/9N7n7nMTZ9V3zsmetIjYMY7JzX/n5pN1175JRiIRs6g9SXuShvXfjqgNUVuStpjUZkWQGPfe+KfXPu/U/IqlfLfA+a4/irCUZZzb3P3BT7z3w6u9+HG/4V2UEKMEkgSidkTpMOmJria6Ksosc6H5+sfuvPZn/tN8d9d9N3zn3D6rsW7EtN5u7Po2Boly0LxP2g0Mkn7wJtdJSKtIlt4C58nzYsvtZZzvzt0fX/V7d3ZVvEVmTjtiCBIJEokaB6PWPjBT7eP9t3zupS+981yw59w+1GvIqUx/q2pCNE0uSmSQWiJJxLRx1ldx4u1fgMnyfHricLm9jAsW8t+f//t3NU378TBBOuliT6CXhqhdZKbSxtXH7vr7/+gv2d1WzgF7zimDjnFMAGl9/7sxJaJFCY+wSBKBmPW/y7BzzXn3UO9Slgkge9Lqz+qq+3IqVKOEFKVPNha1qrp382T6xJAjnBv2nOsfFjCOLNyxZyy73ljGQojElEiJkRC13z22vdNxZHEe//LC/ceGJRbjlr7qLGHOxFysGzOTW07/zPkJ0HqF+Kt/xV/2ffwimYORElNzz31F+dnTP3P+/jzOkYXn9Tf3RrzVSicydoKkT3J4J3Bk4X/w+0GDhKR38u7QVqesak4Fl94NyLmW1xPuuPCj11xy4UevueQHSDx6P0Qe9Zwf/MjbQT/EWCx0fZ6eKJf1/wB79IZ40pspFQAAAABJRU5ErkJggg==" alt="Gemini">
+        <div>
+          <div class="up-name" id="upName">—</div>
+          <div class="up-sub" id="upSub"></div>
+        </div>
+      </div>
+      <div id="secWarn" class="card warn" style="display:none"></div>
+      <div class="row2"><span class="lb">搭子</span><span class="radios" id="personaGroup"></span></div>
+      <div class="row2"><span class="lb">推理档位</span>
+        <select id="thinking">
+          <option value="">关闭（普通款）</option>
+          <option value="low">低（ET · low）</option>
+          <option value="medium">中（ET · medium）</option>
+          <option value="high">高（ET · high）</option>
+        </select></div>
+      <div class="row2"><span class="lb">眼睛</span><span class="radios">
+        <label><input type="radio" name="source" value="camera" checked>摄像头</label>
+        <label><input type="radio" name="source" value="display">屏幕共享</label></span></div>
+      <div class="row2"><span class="lb">镜头</span>
+        <select id="camPicker"><option value="">自动</option></select></div>
+      <div class="row2"><span class="lb">帧率</span>
+        <select id="fps">
+          <option value="1">1 fps</option>
+          <option value="2">2 fps</option>
+          <option value="4" selected>4 fps</option>
+          <option value="6">6 fps</option>
+        </select></div>
+      <div class="row">
+        <button id="start">开始</button>
+        <button id="stop" class="alt" disabled>停止</button>
+      </div>
+    </div>
+
+    <div class="card" id="prevCard">
+      <label>预览 <span id="state" class="badge">未连接</span></label>
+      <video id="preview" playsinline muted></video>
+      <div class="row" style="margin-top:6px">
+        <input id="textInput" type="text" placeholder="文字输入（调试用）">
+        <button id="sendText" class="alt" style="flex:0 0 72px">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="right">
+    <div id="piAsk" class="card ask pulse" style="display:none"></div>
+    <div class="card" id="logCard">
+      <label>日志 <span id="logHead"><input type="checkbox" id="focusLog" checked style="vertical-align:-2px"> 只看重点</span></label>
+      <div id="log"></div>
+    </div>
+  </div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const pick = (name) => {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : '';
+};
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g,
+  (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// 日志：按来源上色 + 「只看重点」过滤（演示时一眼能看出：在跟模型说话 / 在调工具 / pi 在干活）
+const LOG_KINDS = {
+  you:      { badge: '🎙 你',   cls: 'k-you' },
+  model:    { badge: '🔊 搭子', cls: 'k-model' },
+  tool:     { badge: '🛠 工具', cls: 'k-tool' },
+  pi:       { badge: '🤖 pi',   cls: 'k-pi' },
+  ask:      { badge: '⏳ 决策', cls: 'k-ask' },
+  progress: { badge: '⏱ 进度', cls: 'k-prog' },
+  err:      { badge: '⚠️ 错误', cls: 'k-err' },
+  sys:      { badge: '',        cls: 'k-sys' },
+};
+const LOG_KEEP = 200;
+function log(m, kind = 'sys') {
+  const el = $('log'), k = LOG_KINDS[kind] || LOG_KINDS.sys;
+  const row = document.createElement('div');
+  row.className = 'ln ' + k.cls;
+  const ts = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+  row.innerHTML = `<span class="ts">${ts}</span>` +
+    (k.badge ? `<span class="bd">${k.badge}</span>` : '') +
+    `<span class="ms">${esc(m)}</span>`;
+  el.appendChild(row);
+  while (el.children.length > LOG_KEEP) el.removeChild(el.firstChild);
+  if ($('focusLog').checked && kind === 'sys') row.style.display = 'none';
+  else el.scrollTop = 1e9;
+}
+$('focusLog').onchange = () => {
+  const on = $('focusLog').checked;
+  for (const row of $('log').children) {
+    row.style.display = (on && row.classList.contains('k-sys')) ? 'none' : '';
+  }
+};
+const b64 = (buf) => { let s = ''; const u = new Uint8Array(buf);
+  for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000));
+  return btoa(s); };
+const unb64 = (s) => { const bin = atob(s); const u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; };
+
+let ws = null, audioCtx = null, micNode = null, worklet = null, playHead = 0, camTimer = null;
+let ready = false, wakeLock = null;
+
+const WORKLET = `
+class Cap extends AudioWorkletProcessor {
+  constructor(){ super(); this.buf = []; this.ratio = sampleRate / 16000; this.acc = 0; this.n = 0; }
+  process(inputs){
+    const ch = inputs[0][0]; if (!ch) return true;
+    for (let i = 0; i < ch.length; i++) {
+      this.acc += ch[i]; this.n++;
+      if (this.n >= this.ratio) { this.buf.push(Math.max(-1, Math.min(1, this.acc / this.n)));
+        this.acc = 0; this.n = 0; }
+    }
+    while (this.buf.length >= 512) {
+      const chunk = this.buf.splice(0, 512); const out = new Int16Array(512);
+      for (let i = 0; i < 512; i++) out[i] = chunk[i] * 32767;
+      this.port.postMessage(out.buffer, [out.buffer]);
+    }
+    return true;
+  }
+}
+registerProcessor('cap', Cap);`;
+
+// 摄像头列表：拿到权限后 label 才有意义，所以每次取流后都刷新一次
+async function refreshCams(activeId) {
+  try {
+    const devs = (await navigator.mediaDevices.enumerateDevices())
+      .filter((d) => d.kind === 'videoinput');
+    const sel = $('camPicker');
+    const saved = activeId || (() => { try { return localStorage.getItem('cam.deviceId') || ''; } catch (e) { return ''; } })();
+    sel.innerHTML = '<option value="">自动（让浏览器选）</option>' + devs.map((d, i) =>
+      `<option value="${d.deviceId}"${d.deviceId === saved ? ' selected' : ''}>` +
+      `${esc(d.label || ('摄像头 ' + (i + 1)))}</option>`).join('');
+    if (devs.length > 1) log(`发现 ${devs.length} 个摄像头，可在「镜头」里切换（视角差异通常很大）`);
+  } catch (e) { /* 无权限时忽略 */ }
+}
+
+async function loadPersonas() {
+  const r = await fetch('/api/personas'); const d = await r.json();
+  $('personaGroup').innerHTML = d.items.map(i =>
+    `<label title="${esc(i.tagline)}"><input type="radio" name="persona" value="${i.id}"` +
+    `${i.id === d.default ? ' checked' : ''}>${esc(i.name)}</label>`).join('');
+}
+
+function wsURL() { return (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/ws/client'; }
+
+function connect() {
+  ws = new WebSocket(wsURL());
+  ws.onopen = () => { log('WS 已连接（本机中继）');
+    const th = $('thinking').value;
+    try { localStorage.setItem('live.thinking', th); } catch (e) {}
+    try { localStorage.setItem('live.fps', $('fps').value); } catch (e) {}
+    ws.send(JSON.stringify({ type: 'start', persona: pick('persona'), thinking: th })); };
+  ws.onclose = () => { log('WS 已断开'); setState('已断开'); };
+  ws.onerror = () => log('WS 错误');
+  ws.onmessage = (ev) => handle(JSON.parse(ev.data));
+}
+
+function setState(t) { $('state').textContent = t; }
+
+function handle(msg) {
+  if (msg.type === 'starting') {
+    setState('连接中…');
+    if (msg.model) { $('upName').textContent = (msg.label || msg.model);
+      $('upSub').textContent = `model=${msg.model}`; }
+    log(`启动上游：persona=${msg.persona} · model=${msg.model || '?'} · ${msg.label || ''}`);
+    return;
+  }
+  if (msg.type === 'ready') { ready = true; setState('就绪');
+    log(`上游就绪 · persona=${msg.persona}` + (msg.model ? ` · model=${msg.model}` : '')
+        + (msg.thinking ? ` · thinking=${msg.thinking}` : ' · 无思考档'));
+    return; }
+  if (msg.type === 'log') { log(msg.message, msg.kind === 'pi' ? 'pi' : (msg.kind || 'sys')); return; }
+  // pi 需要你拍板：等你的语音回答（中途不答会超时自动取消）
+  if (msg.type === 'pi_dialog') {
+    const opts = (msg.options || []).join(' / ');
+    $('piAsk').style.display = 'block';
+    $('piAsk').innerHTML =
+      `⏳ <b>pi 等你拍板</b>（${Math.round(msg.deadlineIn || 0)}s 内不答自动取消）<br>`
+      + (msg.title ? `<b>${esc(msg.title)}</b><br>` : '')
+      + (msg.message ? `${esc(msg.message)}<br>` : '')
+      + (opts ? `选项：${esc(opts)}<br>` : '')
+      + (msg.needsPassphrase ? '⚠ 放行类请求：请先完整听操作，再说出完整口令' : '');
+    log(`pi 决策请求 [${msg.method}] ${msg.title || ''}（request_id=${msg.id}）`);
+    return;
+  }
+  if (msg.type === 'pi_dialog_done') {
+    $('piAsk').style.display = 'none';
+    log(`pi 决策已处理：${msg.result || ''}`);
+    return;
+  }
+  if (msg.type === 'error') { log('错误: ' + msg.message, 'err'); setState('错误'); return; }
+  if (msg.type === 'closed') { setState('上游已关闭'); return; }
+  if (msg.type === 'tool_call') {
+    const a = msg.args || {};
+    const brief = a.path || a.prompt || a.source || a.request_id || '';
+    log(`调用 ${msg.name}${brief ? ' · ' + String(brief).slice(0, 60) : ''}`, 'tool');
+    return;
+  }
+  if (msg.type === 'tool_result') {
+    log(`${msg.ok ? '✓' : '✗'} ${msg.name} — ${msg.summary || ''}`, 'tool');
+    return;
+  }
+  if (msg.type === 'upstream') { const sc = msg.payload.serverContent || {};
+    if (sc.inputTranscription?.text) log(sc.inputTranscription.text, 'you');
+    if (sc.outputTranscription?.text) log(sc.outputTranscription.text, 'model');
+    for (const p of (sc.modelTurn?.parts || [])) {
+      const d = p.inlineData; if (!d?.data) continue;
+      if ((d.mimeType || '').startsWith('audio/')) playAudio(d.data, d.mimeType);
+    }
+  }
+}
+
+function playAudio(data, mime) {
+  const rate = parseInt((mime.match(/rate=(\d+)/) || [])[1] || '24000', 10);
+  const pcm = new Int16Array(unb64(data).buffer);
+  const f32 = new Float32Array(pcm.length);
+  for (let i = 0; i < pcm.length; i++) f32[i] = pcm[i] / 32768;
+  const ab = audioCtx.createBuffer(1, f32.length, rate);
+  ab.copyToChannel(f32, 0);
+  const src = audioCtx.createBufferSource();
+  src.buffer = ab; src.connect(audioCtx.destination);
+  playHead = Math.max(playHead, audioCtx.currentTime);
+  src.start(playHead); playHead += ab.duration;
+}
+
+async function start() {
+  refreshStatus();   // 换实现后重启服务端时，横幅能跟着更新
+  if (!window.isSecureContext && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    log('⚠ 非安全上下文：浏览器会拒绝摄像头/麦克风。请改用 HTTPS，或用 Chrome 的 --unsafely-treat-insecure-origin-as-secure');
+  }
+  audioCtx = new AudioContext();
+  const blob = new Blob([WORKLET], { type: 'application/javascript' });
+  const url = URL.createObjectURL(blob);
+  await audioCtx.audioWorklet.addModule(url);
+  playHead = 0;
+
+  const mode = pick('source') || 'camera';
+  let stream;
+  const camId = $('camPicker').value;
+  try {
+    if (mode === 'display') {
+      stream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 1 }, audio: false });
+    } else {
+      // 镜头/视角：facingMode 用 ideal（硬约束在某些设备上会直接失败）
+      const video = camId
+        ? { deviceId: { exact: camId }, width: { ideal: 1280 }, height: { ideal: 720 } }
+        : { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } };
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video, audio: false });
+      } catch (e) {
+        log('指定镜头取流失败，回退默认：' + e.message);
+        stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      }
+    }
+  } catch (e) { log('视觉采集失败: ' + e.message); return; }
+
+  // 摄像头：尽量把视角拉广 + 报出实际拿到什么
+  if (mode === 'camera') {
+    const track = stream.getVideoTracks()[0];
+    try {
+      const caps = track.getCapabilities ? track.getCapabilities() : {};
+      if (caps.zoom && typeof caps.zoom.min === 'number') {
+        await track.applyConstraints({ advanced: [{ zoom: caps.zoom.min }] });
+        log(`视角：zoom 可调 ${caps.zoom.min}–${caps.zoom.max}，已拉到最广 ${caps.zoom.min}`);
+      } else {
+        log('视角：本设备/浏览器不暴露 zoom，只能用当前镜头本身（想更广请选超广角镜头）');
+      }
+    } catch (e) { log('zoom 调整失败（不影响使用）: ' + e.message); }
+    const st = track.getSettings ? track.getSettings() : {};
+    log(`镜头: ${track.label || '未命名'} · ${st.width}×${st.height} · zoom=${st.zoom ?? '-'}`);
+    if (st.deviceId) { try { localStorage.setItem('cam.deviceId', st.deviceId); } catch (e) {} }
+    refreshCams(st.deviceId);
+  } else {
+    log(`屏幕共享已开启（镜头选择仅摄像头模式生效）`);
+  }
+
+  $('preview').srcObject = stream;
+  await $('preview').play().catch(() => {});
+
+  // 麦克风（16k PCM）
+  try {
+    const mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    const src = audioCtx.createMediaStreamSource(mic);
+    micNode = new AudioWorkletNode(audioCtx, 'cap');
+    micNode.port.onmessage = (e) => {
+      if (ws?.readyState === 1 && ready) ws.send(JSON.stringify({ type: 'audio', data: b64(e.data) }));
+    };
+    src.connect(micNode);
+    log('麦克风已开启（16kHz PCM 上行）');
+  } catch (e) { log('麦克风失败: ' + e.message); }
+
+  connect();
+  $('start').disabled = true; $('stop').disabled = false;
+  setState('连接中…');
+
+  // 视觉：可调帧率采样成 JPEG 帧
+  // 实测（2026-09-22）：同一串数字按 1/4/12 fps 发进 Gemini Live，
+  //   1fps → 读到 9/10； 4fps → 10/10； 12fps 突发 → 8/10
+  // 即：**上游在 4fps 以内会把每一帧都吃掉**，不是文档说的"只按 1 FPS 处理"。
+  const cv = document.createElement('canvas');
+  const fps = Math.max(1, Math.min(8, parseInt($('fps').value, 10) || 4));
+  let inFlight = false;                     // 上一帧还没发完就跳过，避免堆积
+  log(`视觉帧率：${fps} fps`);
+  camTimer = setInterval(() => {
+    const v = $('preview');
+    if (!v.videoWidth || !ready || ws?.readyState !== 1 || inFlight) return;
+    inFlight = true;
+    const w = 768, h = Math.round(v.videoHeight * (768 / v.videoWidth));
+    cv.width = w; cv.height = h; cv.getContext('2d').drawImage(v, 0, 0, w, h);
+    cv.toBlob((b) => {
+      if (!b) { inFlight = false; return; }
+      b.arrayBuffer().then((ab) => {
+        if (ws?.readyState === 1) {
+          ws.send(JSON.stringify({ type: 'image', data: b64(ab), mime: 'image/jpeg' }));
+        }
+        inFlight = false;
+      }).catch(() => { inFlight = false; });
+    }, 'image/jpeg', 0.6);
+  }, Math.round(1000 / fps));
+
+  try { wakeLock = await navigator.wakeLock?.request('screen'); log('已申请屏幕常亮'); } catch (e) {}
+}
+
+function stop() {
+  camTimer && clearInterval(camTimer); camTimer = null;
+  try { ws?.send(JSON.stringify({ type: 'stop' })); } catch (e) {}
+  ws?.close(); ws = null; ready = false;
+  micNode?.disconnect(); $('preview').srcObject?.getTracks().forEach(t => t.stop());
+  wakeLock?.release?.(); wakeLock = null;
+  audioCtx?.close(); audioCtx = null; playHead = 0;
+  $('start').disabled = false; $('stop').disabled = true; setState('已停止'); log('已停止');
+}
+
+$('start').onclick = start;
+$('stop').onclick = stop;
+$('sendText').onclick = () => {
+  const t = $('textInput').value.trim(); if (!t || ws?.readyState !== 1) return;
+  ws.send(JSON.stringify({ type: 'text', text: t })); log('你(文字): ' + t); $('textInput').value = '';
+};
+$('textInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('sendText').click(); });
+
+// 上游实现的展示名：演示时一眼看出跑的是哪家
+const IMPL_LABEL = {
+  qwen: { name: 'Qwen 3.5 Omni Realtime', cls: 'up-qwen' },
+  adk:  { name: 'Gemini 3.8 Live',        cls: 'up-google' },
+  raw:  { name: 'Gemini 3.8 Live',        cls: 'up-google' },
+};
+
+function paintUpstream(d) {
+  const info = IMPL_LABEL[d.impl] || { name: d.impl || '未知实现', cls: 'up-unk' };
+  const th = d.thinking || {};
+  $('upstream').className = `card up ${info.cls}`;
+  // Gemini 图标只在 Gemini 系上显示（切到 Qwen 时隐藏）
+  $('upIcon').style.display = (d.impl === 'adk' || d.impl === 'raw') ? '' : 'none';
+  $('upName').textContent = info.name;
+  const ep = (d.endpoint || '').split('/')[0];   // 只显示 host，手机上一行放得下
+  $('upSub').textContent = `impl=${d.impl || '?'} · model=${d.model || '?'}` +
+    ` · voice=${d.voice || '-'}` + (ep ? ` · ${ep}` : '');
+  $('upstream').style.display = 'flex';
+  // Qwen 等无 thinking 档的实现：禁用选择器
+  const sel = $('thinking');
+  if (th.supported === false) {
+    sel.disabled = true;
+    sel.title = th.notes || '当前上游无推理档位';
+  } else {
+    sel.disabled = false;
+  }
+}
+
+function refreshStatus() {
+  return fetch('/api/status').then(r => r.json()).then(d => {
+    paintUpstream(d);
+    const keyTxt = d.key_present === true ? '已配置' : d.key_present === false ? '缺失' : '未知';
+    log(`服务端: impl=${d.impl || '?'} model=${d.model} voice=${d.voice || '-'} proxy=${d.proxy || '直连'} key=${keyTxt}${d.key_source ? ` (${d.key_source})` : ''}`);
+    log(`pi 桥接: ${JSON.stringify(d.bridge)}`);
+    // 只在服务端明确回答 key_present=false 时告警；字段缺失（老版本服务端）不算缺失
+    if (d.key_present === false) {
+      const name = d.impl === 'qwen' ? 'DASHSCOPE_API_KEY' : 'GEMINI_API_KEY';
+      $('secWarn').style.display = 'block';
+      $('secWarn').textContent = `⚠ 服务端未找到 ${name}` + (d.key_warning ? ` — ${d.key_warning}` : '');
+    }
+  }).catch(e => log('状态查询失败: ' + e.message));
+}
+
+// 屏幕共享时禁用「镜头」选择（摄像头才需要选镜头）
+function syncCams() {
+  const m = pick('source');
+  const sel = $('camPicker');
+  sel.disabled = (m === 'display');
+  sel.title = m === 'display' ? '屏幕共享模式下不需要选镜头' : '';
+}
+document.querySelectorAll('input[name=source]').forEach((r) => r.addEventListener('change', syncCams));
+syncCams();
+
+loadPersonas();
+// 恢复上次选的推理档位；Qwen 侧会由 /api/status 自动禁用
+(() => { try { const v = localStorage.getItem('live.thinking');
+  if (v !== null && $('thinking')) $('thinking').value = v; } catch (e) {} })();
+(() => { try { const v = localStorage.getItem('live.fps');
+  if (v !== null && $('fps')) $('fps').value = v; } catch (e) {} })();
+refreshCams();          // 页面加载先列一次（label 可能为空，取流后会再刷新）
+refreshStatus();
+</script>
+</body>
+</html>
