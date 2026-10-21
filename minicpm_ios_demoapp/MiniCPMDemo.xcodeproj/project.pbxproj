@@ -1,0 +1,396 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0CBE36C26B333560C1E11045 /* InferenceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3D9441608DF5622BE3DAA5 /* InferenceViewModel.swift */; };
+		2C141C99446D324438DD1A12 /* MiniCPMDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 348E967DDBAE75AD8D86D7BC /* MiniCPMDemoApp.swift */; };
+		2C7058BF716B8EFBF1ECDD9D /* MTMDWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5988A513AFBC34DC919CB0A6 /* MTMDWrapper.swift */; };
+		5B6F3D071A1FF834E9EC6B89 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEA0AA28B50243DF709DBFC /* ContentView.swift */; };
+		62F36D0C5BE5C3F80506950A /* llama.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B865ECDD84DA8130449E3102 /* llama.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		72E27741DDDCDBF84AACA986 /* MTMDParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0660A389FE9208C09123E78 /* MTMDParams.swift */; };
+		7E53E270C4C2568ECEC27398 /* llama.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B865ECDD84DA8130449E3102 /* llama.xcframework */; };
+		A25831C5AEE6A2A50E1655A2 /* MTMDError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0BC76524932132C511F727 /* MTMDError.swift */; };
+		AD3C5F0BB41AB9555788430F /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2948DBF0AC70ECB53AA4EDE /* CameraPicker.swift */; };
+		C061ECCD41E9582520D10E84 /* MTMDToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DD92019042099D6504B1CD /* MTMDToken.swift */; };
+		FB8D3AC8F4B4E5A609AB8732 /* MBMtmd.mm in Sources */ = {isa = PBXBuildFile; fileRef = 869B79F5205D1405BAE841F5 /* MBMtmd.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3C0322B86860642014F5D317 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				62F36D0C5BE5C3F80506950A /* llama.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0A0BC76524932132C511F727 /* MTMDError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTMDError.swift; sourceTree = "<group>"; };
+		222423A69D41E7DDFC204EDA /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		2DEA0AA28B50243DF709DBFC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		348E967DDBAE75AD8D86D7BC /* MiniCPMDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniCPMDemoApp.swift; sourceTree = "<group>"; };
+		5988A513AFBC34DC919CB0A6 /* MTMDWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTMDWrapper.swift; sourceTree = "<group>"; };
+		79A38994969878D4C0CB6775 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8035724CF553BB18C62D10FF /* MBPrewarmTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBPrewarmTable.h; sourceTree = "<group>"; };
+		869B79F5205D1405BAE841F5 /* MBMtmd.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MBMtmd.mm; sourceTree = "<group>"; };
+		90F9791610E52CDF1DB3FF1C /* MBMtmd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBMtmd.h; sourceTree = "<group>"; };
+		B0660A389FE9208C09123E78 /* MTMDParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTMDParams.swift; sourceTree = "<group>"; };
+		B865ECDD84DA8130449E3102 /* llama.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = llama.xcframework; path = Frameworks/llama.xcframework; sourceTree = "<group>"; };
+		C42BC4C2BE3F574384E1274C /* MiniCPMDemo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MiniCPMDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA3D9441608DF5622BE3DAA5 /* InferenceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceViewModel.swift; sourceTree = "<group>"; };
+		F2948DBF0AC70ECB53AA4EDE /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+		F4DD92019042099D6504B1CD /* MTMDToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MTMDToken.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D55251044E34DB0B78278ADD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7E53E270C4C2568ECEC27398 /* llama.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		09AD5A0AA9A980334A970177 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C42BC4C2BE3F574384E1274C /* MiniCPMDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4B12579ACDF9AE4F7191481F /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				90F9791610E52CDF1DB3FF1C /* MBMtmd.h */,
+				869B79F5205D1405BAE841F5 /* MBMtmd.mm */,
+				8035724CF553BB18C62D10FF /* MBPrewarmTable.h */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
+		888E892E689265A9AC640CE9 = {
+			isa = PBXGroup;
+			children = (
+				F9637429604F2FBE145B1352 /* Sources */,
+				ADCB665ABDE34CFE4281A705 /* Wrapper */,
+				E0FB8E4139FDC6A38F88C066 /* Frameworks */,
+				09AD5A0AA9A980334A970177 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		ADCB665ABDE34CFE4281A705 /* Wrapper */ = {
+			isa = PBXGroup;
+			children = (
+				0A0BC76524932132C511F727 /* MTMDError.swift */,
+				B0660A389FE9208C09123E78 /* MTMDParams.swift */,
+				F4DD92019042099D6504B1CD /* MTMDToken.swift */,
+				5988A513AFBC34DC919CB0A6 /* MTMDWrapper.swift */,
+				4B12579ACDF9AE4F7191481F /* Bridge */,
+			);
+			path = Wrapper;
+			sourceTree = "<group>";
+		};
+		E0FB8E4139FDC6A38F88C066 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B865ECDD84DA8130449E3102 /* llama.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F9637429604F2FBE145B1352 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				222423A69D41E7DDFC204EDA /* Bridging-Header.h */,
+				F2948DBF0AC70ECB53AA4EDE /* CameraPicker.swift */,
+				2DEA0AA28B50243DF709DBFC /* ContentView.swift */,
+				EA3D9441608DF5622BE3DAA5 /* InferenceViewModel.swift */,
+				79A38994969878D4C0CB6775 /* Info.plist */,
+				348E967DDBAE75AD8D86D7BC /* MiniCPMDemoApp.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		79493A709728C7A21B43940A /* MiniCPMDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2A00010B2C79BD7983508F4 /* Build configuration list for PBXNativeTarget "MiniCPMDemo" */;
+			buildPhases = (
+				015C1054DC954931305B369D /* Sources */,
+				D55251044E34DB0B78278ADD /* Frameworks */,
+				3C0322B86860642014F5D317 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MiniCPMDemo;
+			packageProductDependencies = (
+			);
+			productName = MiniCPMDemo;
+			productReference = C42BC4C2BE3F574384E1274C /* MiniCPMDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		660E3E56D0FE8F0078237EA0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					79493A709728C7A21B43940A = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 861C507799176DD0D89EE8D6 /* Build configuration list for PBXProject "MiniCPMDemo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 888E892E689265A9AC640CE9;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 09AD5A0AA9A980334A970177 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				79493A709728C7A21B43940A /* MiniCPMDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		015C1054DC954931305B369D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD3C5F0BB41AB9555788430F /* CameraPicker.swift in Sources */,
+				5B6F3D071A1FF834E9EC6B89 /* ContentView.swift in Sources */,
+				0CBE36C26B333560C1E11045 /* InferenceViewModel.swift in Sources */,
+				FB8D3AC8F4B4E5A609AB8732 /* MBMtmd.mm in Sources */,
+				A25831C5AEE6A2A50E1655A2 /* MTMDError.swift in Sources */,
+				72E27741DDDCDBF84AACA986 /* MTMDParams.swift in Sources */,
+				C061ECCD41E9582520D10E84 /* MTMDToken.swift in Sources */,
+				2C7058BF716B8EFBF1ECDD9D /* MTMDWrapper.swift in Sources */,
+				2C141C99446D324438DD1A12 /* MiniCPMDemoApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0DEBDA6A4401E1F7EFBC146C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Frameworks\"",
+				);
+				INFOPLIST_FILE = Sources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = "-lc++";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.minicpmdemo;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		30C737D3AEB7CB7A09F81EBD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		476DCBCB572CB169DBDE5ED2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"Frameworks\"",
+				);
+				INFOPLIST_FILE = Sources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				OTHER_LDFLAGS = "-lc++";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.minicpmdemo;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		791A5F568CFD114B988F326E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		861C507799176DD0D89EE8D6 /* Build configuration list for PBXProject "MiniCPMDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				791A5F568CFD114B988F326E /* Debug */,
+				30C737D3AEB7CB7A09F81EBD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C2A00010B2C79BD7983508F4 /* Build configuration list for PBXNativeTarget "MiniCPMDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DEBDA6A4401E1F7EFBC146C /* Debug */,
+				476DCBCB572CB169DBDE5ED2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 660E3E56D0FE8F0078237EA0 /* Project object */;
+}

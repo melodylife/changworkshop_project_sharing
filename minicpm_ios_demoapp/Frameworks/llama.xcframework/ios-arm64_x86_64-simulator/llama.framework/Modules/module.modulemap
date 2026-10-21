@@ -1,0 +1,9 @@
+framework module llama {
+    umbrella "Headers"
+    link "c++"
+    link framework "Accelerate"
+    link framework "Metal"
+    link framework "Foundation"
+    link framework "CoreML"
+    export *
+}

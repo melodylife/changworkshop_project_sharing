@@ -1,0 +1,42 @@
+name: MiniCPMDemo
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "16.6"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+targets:
+  MiniCPMDemo:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: Wrapper
+    dependencies:
+      - framework: Frameworks/llama.xcframework
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.minicpmdemo
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/Bridging-Header.h
+        TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.6"
+        OTHER_LDFLAGS: "-lc++"
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: MiniCPM 4.7
+        UILaunchScreen: {}
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        NSPhotoLibraryUsageDescription: 选择照片用于本地多模态推理，图片不会离开设备。
+        NSCameraUsageDescription: 拍摄照片用于本地多模态推理，图片不会离开设备。
+        NSMicrophoneUsageDescription: 本 Demo 不使用麦克风。
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIRequiresFullScreen: true
+        UIApplicationSupportsIndirectInputEvents: true

@@ -1,0 +1,13 @@
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+__pycache__/
+*.log
+
+# 模型与权重（本仓库不携带）
+*.gguf
+*.bin
+*.safetensors
+models/
